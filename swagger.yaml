@@ -1,0 +1,200 @@
+swagger: "2.0"
+info:
+  description: "Apis utilizadas no trabalho prático da matéria de LAB de desenvolvimento de SI e TecWeb."
+  version: ""
+  title: "APIs ParkAqui"
+tags:
+- name: "usuario"
+  description: "Api para login e cadastro de usuários. "
+- name: "relatorios"
+  description: "Api que gera relatórios para análise gerencial."
+schemes:
+- "https"
+- "http"
+paths:
+  /usuario/login:
+    post:
+      tags:
+      - "usuario"
+      summary: "Login no sistema de estacionamento"
+      description: "Verifica a existência de um usuário e permite ou nega seu acesso."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Dados necessários para login do usuário."
+        required: true
+        schema:
+          $ref: "#/definitions/Login"
+      responses:
+        "200":
+          description: "Acesso liberado."
+        "404":
+          description: "Usuário ou senha incorretos."
+  /usuario/cadastrar:
+      post:
+        tags:
+        - "usuario"
+        summary: "Realiza cadastro de usuário no sistema."
+        description: "Cadastra um usuário desde que ele não exista."
+        consumes:
+        - "application/json"
+        produces:
+        - "application/json"
+        parameters:
+        - in: "body"
+          name: "body"
+          description: "Dados necessários para cadastro de um novo usuário."
+          required: true
+          schema:
+            $ref: "#/definitions/Cadastro"
+        responses:
+          "200":
+            description: "Gerente adicionado com sucesso!"
+          "400":
+            description: "Usuário já existente!"
+
+  /relatorios/porte-veiculo:
+    get:
+      tags:
+      - "relatorios"
+      summary: "Obtém relatório por porte de veículo"
+      description: "Retorna quantidade de veículos dos tamanhos pequeno, médio e grande."
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: "#/definitions/PorteVeiculo"
+  /relatorios/lucro-mensal:
+    get:
+      tags:
+      - "relatorios"
+      summary: "Obtém lucro dos últimos 30 dias."
+      description: "Retorna um relatório com o lucro obtido pelo estacionamento nos últimos 30 dias com cada porte de veículo."
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: "#/definitions/LucroMensal"
+  /relatorios/lucro-periodo:
+    get:
+      tags:
+      - "relatorios"
+      summary: "Obtém lucro em um determinado período."
+      description: "Retorna um relatório com o lucro obtido por cada porte de veículo no período de datas selecionado."
+      produces:
+      - "application/json"
+      parameters:
+      - name: "inicio"
+        in: "query"
+        description: "Data de início do período de consulta."
+        required: true
+        type: "string"
+      - name: "fim"
+        in: "query"
+        description: "Data de fim do período de consulta."
+        type: "string"
+        
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: "#/definitions/LucroPeriodo"
+        "400":
+          description: "Datas para consulta não informadas\nData inicio superior a data de fim"
+definitions:
+  Login:
+    type: "object"
+    required:
+    - "Email"
+    - "Senha"
+    properties:
+      Email:
+        type: "string"
+        format: ""
+      Senha:
+        type: "string"
+        format: ""
+    xml:
+      name: "Login"
+  Cadastro:
+    type: "object"
+    required:
+    - "Nome"
+    - "Email"
+    - "Senha"
+    properties:
+      Nome:
+          type: "string"
+          format: ""
+      Email:
+        type: "string"
+        format: ""
+      Senha:
+        type: "string"
+        format: ""
+    xml:
+      name: "Cadastro"
+  PorteVeiculo:
+    type: "object"
+    properties:
+      Pequeno:
+        type: "integer"
+        format: ""
+      Medio:
+        type: "integer"
+        format: ""
+      Grande:
+        type: "integer"
+        format: ""
+    xml:
+      name: "PorteVeiculo"
+  LucroMensal:
+    type: "object"
+    properties:
+      pequeno:
+        type: "number"
+        format: ""
+      medio:
+        type: "number"
+        format: ""
+      grande:
+        type: "number"
+        format: ""
+    xml:
+      name: "LucroMensal"
+  LucroPeriodo:
+    type: "object"
+    properties:
+      19/11/2021:
+        type: "object"
+        properties:
+          pequeno:
+            type: "number"
+            format: ""
+          medio:
+            type: "number"
+            format: ""
+          grande:
+            type: "number"
+            format: ""
+      20/11/2021:
+        type: "object"
+        properties:
+          pequeno:
+            type: "number"
+            format: ""
+          medio:
+            type: "number"
+            format: ""
+          grande:
+            type: "number"
+            format: ""
+        format: ""
